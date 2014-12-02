@@ -11,6 +11,7 @@ Installation
  - copy files to driver directory
  
  - add the following lines to make.php
+ 
     compile("driver/io_fhem.js");
     echo "\n";
     

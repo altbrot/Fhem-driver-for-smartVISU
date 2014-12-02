@@ -26,7 +26,7 @@ Installation
 Howto
 -----
  - define a device in fhem
-   (e.g. define sensor.office.temp OWTHERM 10.FFFFFFFFFFFF)
+   (e.g. ```define sensor.office.temp OWTHERM 10.FFFFFFFFFFFF```)
   
  - configure widget listener
     

@@ -21,16 +21,15 @@ Installation
    
  - optionally activate realtime mode
  
- Howto
- -----
- 
-  - define a device in fhem
-    (e.g. define sensor.office.temp OWTHERM 10.FFFFFFFFFFFF)
+Howto
+-----
+ - define a device in fhem
+   (e.g. define sensor.office.temp OWTHERM 10.FFFFFFFFFFFF)
   
-  - configure widget listener
+ - configure widget listener
     
-    syntax: [devicename]->[readingsval]
+   syntax: [devicename]->[readingsval]
   
-    (e.g. {{ basic.float('sensor.office.temp', 'sensor.office.temp->temperature', '°C') }} )
+   (e.g. {{ basic.float('sensor.office.temp', 'sensor.office.temp->temperature', '°C') }} )
 
 

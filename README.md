@@ -11,9 +11,10 @@ Installation
  - copy files to driver directory
  
  - add the following lines to make.php
- 
+ ```php
     compile("driver/io_fhem.js");
     echo "\n";
+ ```
     
  - call http(s)://[smartVISU host url]/make.php to trigger minification
  
@@ -31,6 +32,6 @@ Howto
     
    syntax: [devicename]->[readingsval]
   
-   (e.g. {{ basic.float('sensor.office.temp', 'sensor.office.temp->temperature', '°C') }} )
+   (e.g. ```{{ basic.float('sensor.office.temp', 'sensor.office.temp->temperature', '°C') }}``` )
 
 

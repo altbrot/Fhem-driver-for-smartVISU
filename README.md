@@ -1,7 +1,7 @@
 Fhem-driver-for-smartVISU
 =========================
 
-This is based on www.smartvisu.de and fhem.de
+This is based on http://www.smartvisu.de and http://fhem.de
 
 This repository contains a driver used to connect smartVISU to fhem homer server.
 

@@ -19,7 +19,7 @@ Installation
  - call ```http(s)://[smartVISU host url]/make.php``` to trigger minification
  
  - go to settings to select fhem driver and configure url and port of fhem server
-   (e.g http://192.168.1.1 and 8083)
+   (e.g ```http://192.168.1.1``` and ```8083```)
    
  - optionally activate realtime mode
  

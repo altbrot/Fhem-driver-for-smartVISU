@@ -28,6 +28,9 @@ Howto
 -----
  - define a dummy device in fhem
    (e.g. ```define sensor.office.temp dummy```)
+
+   or
+
    (e.g. ```define mainroom.lamp.main```)
 
  - initially call set through ui to create a reading
@@ -35,6 +38,9 @@ Howto
  - configure widget listener
   
    (e.g. ```{{ basic.float('sensor.office.temp', 'sensor.office.temp', '°C') }}``` )
+
+   or
+
    (e.g. ```{{ basic.flip('mainroom.lamp.main', 'mainroom.lamp.main', 'on', 'off') }}``` )
 
  - create notify events to trigger sensor changes

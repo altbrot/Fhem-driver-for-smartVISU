@@ -40,27 +40,11 @@ class driver_json
         
         foreach ($this->item as $item)
         {
-            $host = config_driver_address;
-            $port = config_driver_port;
-            
-            $parsedItem = str_replace('->', '#', $item);
-            $tokens = explode('#', $parsedItem);
-            
-            $cmd = "{ReadingsVal('".$tokens[0]."','".$tokens[1]."','')}";
-            $url = $host.":".$port."/fhem?cmd=".urlencode($cmd)."&XHR=1";
-
-            $curl = curl_init($url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            $curl_response = curl_exec($curl);
-            if ($curl_response === false) {
-                $info = curl_getinfo($curl);
-                curl_close($curl);
-                //die('error occured during curl exec. Additioanl info: ' . var_export($info));
+            $response = $this->sendReadCmd($item);
+            if($response !== '')
+            {
+                $res[$item] = $response;
             }
-            curl_close($curl);
-            
-            if($curl_response !== '')
-                $res[$item] = $curl_response;
         }
         return $res;
     }
@@ -72,6 +56,12 @@ class driver_json
     public function write()
     {
         $res = array();     
+        
+        if (count($this->item) > 0)
+        {
+            $this->sendWriteCmd($this->item[0]);
+            $res[$this->item[0]] = $this->val;            
+        }
         
         return $res;
     }
@@ -94,6 +84,51 @@ class driver_json
         }
                         
         return json_encode($ret);
+    }
+    
+    private function sendWriteCmd($item)
+    {
+        $host = config_driver_address;
+        $port = config_driver_port;
+
+        $url = $host.":".$port."/fhem?cmd=".urlencode($this->parseWriteCmd($item, $this->val))."&XHR=1";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_exec($curl);
+        curl_close($curl); 
+    }
+    
+    private function sendReadCmd($item)
+    {
+        $host = config_driver_address;
+        $port = config_driver_port;
+
+        $url = $host.":".$port."/fhem?cmd=".urlencode($this->parseReadCmd($item))."&XHR=1";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $curl_response = curl_exec($curl);
+        
+        if ($curl_response === false) {
+            //$info = curl_getinfo($curl);
+            curl_close($curl);
+            return '';            
+        }
+        else {
+            curl_close($curl);            
+            return $curl_response;
+        }
+    }
+    
+    private function parseReadCmd($item)
+    {
+        return "{ReadingsVal('".$item."','state','')}";
+    }
+    
+    private function parseWriteCmd($item, $val)
+    {
+        return "set ".$item." ".$val;
     }
 }
 

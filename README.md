@@ -45,7 +45,7 @@ Howto
 
  - create notify events to trigger sensor changes
  
-   (e.g. ```define on_owthermsensor_changed OWX_10_XXXXXXXXXXXX:temperature set sensor.office.temp $EVENT```)
+   (e.g. ```define on_owthermsensor_changed notify OWX_10_XXXXXXXXXXXX:temperature set sensor.office.temp $EVENT```)
 
  - create notify events to trigger ui actions
  

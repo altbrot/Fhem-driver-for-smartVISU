@@ -125,16 +125,17 @@ var io = {
 	 */
 	get: function (item) {
 		$.ajax({  url: "driver/io_fhem.php",
-			data: ({item: item}),
+			data: ({'cmd': 'read', 'item': item}),
 			type: "GET",
 			dataType: 'json',
 			async: true,
 			cache: false
 		})
-			.done(function (response) {
-				widget.update(item, response[item]);
-			})
+                .done(function (response) {
+                        widget.update(item, response[item]);
+                });
 	},
+       
 
 	/**
 	 * Write a value to bus
@@ -145,18 +146,18 @@ var io = {
 		io.stop();
 		$.ajax
 		({  url: "driver/io_fhem.php",
-			data: ({item: item, val: val}),
+			data: ({'cmd': 'write', 'item': item, 'val': val}),
 			type: "GET",
 			dataType: 'json',
 			cache: false
 		})
-			.done(function (response) {
-				widget.update(item, response[item]);
+                .done(function (response) {
+                        widget.update(item, response[item]);
 
-				if (timer_run) {
-					io.start();
-				}
-			})
+                        if (timer_run) {
+                                io.start();
+                        }
+                });
 	},
 
 	/**
@@ -175,18 +176,54 @@ var io = {
 			items = items.substr(0, items.length - 1);
 
 			$.ajax({  url: 'driver/io_fhem.php',
-				data: ({item: items}),
+				data: ({'cmd':'read', 'item': items}),
 				type: 'POST',
 				dataType: 'json',
 				async: true,
 				cache: false
 			})
-				.done(function (response) {
-					$.each(response, function (item, val) {
-						widget.update(item, val);
-					})
-				})
+                        .done(function (response) {
+                                $.each(response, function (item, val) {
+                                        widget.update(item, val);
+                                });
+                        });
 		}
-	}
+                
+                // plots
+		widget.plot().each(function (idx) {
+			var items = widget.explode($(this).attr('data-item'));
+
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i].split('.');
+
+				if (widget.get(items[i]) == null && (widget.checkseries(items[i]))) {
+                                    
+                                    $.ajax({  url: "driver/io_fhem.php",
+                                            data: ({'cmd': 'plot', 'item': items[i], 'val': {'tmin': io.getDate(item[item.length - 2]), 'tmax': io.getDate(item[item.length - 1])}}),
+                                            type: "GET",
+                                            dataType: 'json',
+                                            async: true,
+                                            cache: false
+                                    })
+                                    .done(function (response) { 
+                                        for (var key in response) {
+                                            widget.update(key, response[key]);
+                                        }                                            
+                                    });
+				}
+			}
+		});
+	},        
+        
+        // -----------------------------------------------------------------------------
+	// H E L P E R   F U N C T I O N S
+	// -----------------------------------------------------------------------------
+        
+        getDate: function(d) {
+            var t = new Date().getTime() - new Date().duration(d);
+            t = new Date(t);
+            var tminfs = t.getFullYear() + "-" + ('0' + (t.getMonth()+1)).slice(-2) + "-" + ('0' + t.getDate()).slice(-2) + "_" + t.getHours()+ ":" + t.getMinutes() + ":" + t.getSeconds();
+            return tminfs;
+        }
 
 };
